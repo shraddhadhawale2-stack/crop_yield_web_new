@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CropVision AI | Smart Crop Yield Prediction</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --forest: #0B3D2E;
+            --green: #1F7A4D;
+            --green-light: #E8F5EC;
+            --green-soft: #F4FAF6;
+            --white: #FFFFFF;
+            --amber: #F4A300;
+            --text: #2E2E2E;
+            --muted: #6B7A72;
+            --border: #DDE9E1;
+            --shadow: 0 15px 45px rgba(11, 61, 46, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: var(--green-soft);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: auto;
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            text-decoration: none;
+            color: var(--forest);
+        }
+
+        .logo-icon {
+            width: 43px;
+            height: 43px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: var(--green-light);
+            font-size: 23px;
+        }
+
+        .logo-text {
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #43534B;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -3px;
+            width: 0;
+            height: 2px;
+            background: var(--green);
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--green);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-btn {
+            background: var(--green);
+            color: white !important;
+            padding: 10px 17px !important;
+            border-radius: 9px;
+        }
+
+        .nav-btn::after {
+            display: none;
+        }
+
+        .nav-btn:hover {
+            background: var(--forest);
+        }
+
+        /* ================= HERO ================= */
+
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 90px 25px 80px;
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 70px;
+            align-items: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 13px;
+            border-radius: 30px;
+            background: var(--green-light);
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            color: var(--forest);
+            font-size: clamp(40px, 5vw, 65px);
+            line-height: 1.08;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: var(--green);
+        }
+
+        .hero-description {
+            max-width: 600px;
+            color: var(--muted);
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .primary-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            background: var(--green);
+            color: white;
+            padding: 14px 23px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 14px;
+            transition: 0.2s ease;
+            box-shadow: 0 9px 25px rgba(31, 122, 77, 0.2);
+        }
+
+        .primary-btn:hover {
+            background: var(--forest);
+            transform: translateY(-2px);
+        }
+
+        .secondary-btn {
+            text-decoration: none;
+            color: var(--forest);
+            border: 1px solid var(--border);
+            background: white;
+            padding: 13px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* HERO VISUAL */
+
+        .hero-visual {
+            min-height: 380px;
+            border-radius: 28px;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(11,61,46,0.96),
+                    rgba(31,122,77,0.88)
+                );
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 25px 60px rgba(11,61,46,0.16);
+        }
+
+        .leaf-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: 0.12;
+            background-image:
+                radial-gradient(circle at 20% 20%, white 2px, transparent 3px),
+                radial-gradient(circle at 80% 70%, white 2px, transparent 3px);
+            background-size: 35px 35px;
+        }
+
+        .farm-icon {
+            font-size: 130px;
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 15px 20px rgba(0,0,0,0.18));
+        }
+
+        .floating-card {
+            position: absolute;
+            background: rgba(255,255,255,0.96);
+            border-radius: 15px;
+            padding: 15px 18px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.14);
+        }
+
+        .floating-card.top {
+            top: 30px;
+            left: 28px;
+        }
+
+        .floating-card.bottom {
+            bottom: 28px;
+            right: 25px;
+        }
+
+        .floating-title {
+            font-size: 10px;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .floating-value {
+            font-size: 20px;
+            color: var(--forest);
+            font-weight: 800;
+        }
+
+        /* ================= SECTIONS ================= */
+
+        .section {
+            max-width: 1200px;
+            margin: auto;
+            padding: 85px 25px;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-heading span {
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .section-heading h2 {
+            color: var(--forest);
+            font-size: 34px;
+            margin: 7px 0;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* ================= PREDICTION ================= */
+
+        .prediction-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: var(--shadow);
+        }
+
+        .prediction-header {
+            margin-bottom: 28px;
+        }
+
+        .prediction-header h3 {
+            color: var(--forest);
+            font-size: 22px;
+        }
+
+        .prediction-header p {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 19px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .field label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #405047;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: #FBFDFC;
+            color: var(--text);
+            font-size: 13px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(31,122,77,0.10);
+            background: white;
+        }
+
+        .predict-area {
+            text-align: center;
+            margin-top: 32px;
+        }
+
+        .predict-btn {
+            border: none;
+            background: var(--green);
+            color: white;
+            padding: 14px 34px;
+            border-radius: 10px;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.2s;
+            box-shadow: 0 9px 20px rgba(31,122,77,0.20);
+        }
+
+        .predict-btn:hover {
+            background: var(--forest);
+            transform: scale(1.02);
+        }
+
+        /* RESULT */
+
+        #result {
+            display: none;
+            margin-top: 30px;
+            border-radius: 15px;
+            background: var(--green-light);
+            border-left: 6px solid var(--green);
+            padding: 25px;
+        }
+
+        .result-label {
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        #prediction {
+            color: var(--forest);
+            font-size: 42px;
+            font-weight: 800;
+            margin-top: 4px;
+        }
+
+        .result-subtitle {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        #error {
+            display: none;
+            margin-top: 20px;
+            padding: 13px;
+            border-radius: 9px;
+            color: #991B1B;
+            background: #FEF2F2;
+            border: 1px solid #FECACA;
+            font-size: 13px;
+        }
+
+        /* ================= HOW IT WORKS ================= */
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .step {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 27px 20px;
+            text-align: center;
+            box-shadow: 0 8px 28px rgba(11,61,46,0.05);
+            position: relative;
+        }
+
+        .step-number {
+            width: 38px;
+            height: 38px;
+            margin: 0 auto 15px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--green);
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .step-icon {
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+
+        .step h3 {
+            color: var(--forest);
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+
+        .step p {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* ================= PERFORMANCE ================= */
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .metric {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .metric-icon {
+            font-size: 25px;
+        }
+
+        .metric-value {
+            color: var(--forest);
+            font-size: 25px;
+            font-weight: 800;
+            margin-top: 5px;
+        }
+
+        .metric-label {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .metric-note {
+            margin-top: 20px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* ================= ABOUT ================= */
+
+        .about-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .about-card {
+            background: var(--forest);
+            color: white;
+            border-radius: 20px;
+            padding: 38px;
+        }
+
+        .about-card h2 {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .about-card p {
+            color: #DCEBE3;
+            font-size: 14px;
+        }
+
+        .developer-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 38px;
+            text-align: center;
+        }
+
+        .developer-avatar {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            background: var(--green-light);
+            display: grid;
+            place-items: center;
+            margin: 0 auto 15px;
+            font-size: 35px;
+        }
+
+        .developer-card h3 {
+            color: var(--forest);
+            font-size: 20px;
+        }
+
+        .developer-card p {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .tech-pills {
+            margin-top: 18px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .pill {
+            padding: 6px 10px;
+            border-radius: 20px;
+            background: var(--green-light);
+            color: var(--green);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            background: var(--forest);
+            color: #CFE3D8;
+            padding: 30px 25px;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        footer strong {
+            color: white;
+        }
+
+        footer p {
+            font-size: 12px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 950px) {
+
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 40px;
+            }
+
+            .hero-description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                max-width: 550px;
+                width: 100%;
+                margin: auto;
+            }
+
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .nav-links a:not(.nav-btn) {
+                display: none;
+            }
+
+            .navbar {
+                padding: 13px 18px;
+            }
+
+            .hero {
+                padding: 60px 20px;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .hero-visual {
+                min-height: 280px;
+            }
+
+            .farm-icon {
+                font-size: 90px;
+            }
+
+            .section {
+                padding: 60px 18px;
+            }
+
+            .section-heading h2 {
+                font-size: 28px;
+            }
+
+            .prediction-card {
+                padding: 22px;
+            }
+
+            .form-grid,
+            .steps,
+            .metrics,
+            .about-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header>
+    <nav class="navbar">
+
+        <a href="#home" class="logo">
+            <div class="logo-icon">🌱</div>
+            <div class="logo-text">CropVision AI</div>
+        </a>
+
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#prediction">Prediction</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#about">About</a>
+            <a href="#prediction" class="nav-btn">Predict Now</a>
+        </div>
+
+    </nav>
+</header>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero" id="home">
+
+    <div>
+
+        <div class="badge">
+            🌾 Agriculture + Artificial Intelligence
+        </div>
+
+        <h1>
+            Smart <span>Crop Yield</span> Prediction
+        </h1>
+
+        <p class="hero-description">
+            Predict crop yield using agricultural and environmental
+            data with a machine learning based prediction system.
+        </p>
+
+        <div class="hero-actions">
+
+            <a href="#prediction" class="primary-btn">
+                Start Prediction →
+            </a>
+
+            <a href="#how-it-works" class="secondary-btn">
+                How It Works
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="hero-visual">
+
+        <div class="leaf-pattern"></div>
+
+        <div class="floating-card top">
+            <div class="floating-title">AI Prediction</div>
+            <div class="floating-value">🌱 Ready</div>
+        </div>
+
+        <div class="farm-icon">
+            🌾
+        </div>
+
+        <div class="floating-card bottom">
+            <div class="floating-title">Agricultural Data</div>
+            <div class="floating-value">📊 ML Powered</div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= PREDICTION ================= -->
+
+<section class="section" id="prediction">
+
+    <div class="section-heading">
+        <span>Machine Learning Tool</span>
+        <h2>Crop Yield Prediction</h2>
+        <p>Enter agricultural and environmental details to generate a prediction.</p>
+    </div>
+
+
+    <div class="prediction-card">
+
+        <div class="prediction-header">
+            <h3>🌱 Enter Farm Details</h3>
+            <p>Provide the required information below.</p>
+        </div>
+
+
+        <form id="predictionForm">
+
+            <div class="form-grid">
+
+                <div class="field">
+                    <label>Crop Type</label>
+                    <input type="text" id="Crop_Type" placeholder="e.g. Wheat" required>
+                </div>
+
+                <div class="field">
+                    <label>Region</label>
+                    <input type="text" id="Region" placeholder="e.g. Maharashtra" required>
+                </div>
+
+                <div class="field">
+                    <label>Soil Type</label>
+                    <input type="text" id="Soil_Type" placeholder="e.g. Black" required>
+                </div>
+
+                <div class="field">
+                    <label>Season</label>
+                    <input type="text" id="Season" placeholder="e.g. Kharif" required>
+                </div>
+
+                <div class="field">
+                    <label>Farm Area (Hectares)</label>
+                    <input type="number" step="any" id="Farm_Area_Hectares" required>
+                </div>
+
+                <div class="field">
+                    <label>Rainfall (mm)</label>
+                    <input type="number" step="any" id="Rainfall_mm" required>
+                </div>
+
+                <div class="field">
+                    <label>Temperature (°C)</label>
+                    <input type="number" step="any" id="Temperature_C" required>
+                </div>
+
+                <div class="field">
+                    <label>Humidity (%)</label>
+                    <input type="number" step="any" id="Humidity_Percent" required>
+                </div>
+
+                <div class="field">
+                    <label>Soil pH</label>
+                    <input type="number" step="any" id="Soil_pH" required>
+                </div>
+
+                <div class="field">
+                    <label>Nitrogen (kg/ha)</label>
+                    <input type="number" step="any" id="Nitrogen_kg_ha" required>
+                </div>
+
+                <div class="field">
+                    <label>Phosphorus (kg/ha)</label>
+                    <input type="number" step="any" id="Phosphorus_kg_ha" required>
+                </div>
+
+                <div class="field">
+                    <label>Potassium (kg/ha)</label>
+                    <input type="number" step="any" id="Potassium_kg_ha" required>
+                </div>
+
+                <div class="field">
+                    <label>Fertilizer Used (kg)</label>
+                    <input type="number" step="any" id="Fertilizer_Used_kg" required>
+                </div>
+
+                <div class="field">
+                    <label>Pesticide Used (Liters)</label>
+                    <input type="number" step="any" id="Pesticide_Used_Liters" required>
+                </div>
+
+                <div class="field">
+                    <label>Irrigation Method</label>
+
+                    <select id="Irrigation_Method" required>
+                        <option value="">Select method</option>
+                        <option value="Drip">Drip</option>
+                        <option value="Sprinkler">Sprinkler</option>
+                        <option value="Flood">Flood</option>
+                    </select>
+
+                </div>
+
+                <div class="field">
+                    <label>Sunshine Hours</label>
+                    <input type="number" step="any" id="Sunshine_Hours" required>
+                </div>
+
+                <div class="field">
+                    <label>Organic Farming</label>
+
+                    <select id="Organic_Farming" required>
+                        <option value="">Select</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="predict-area">
+
+                <button type="submit" class="predict-btn">
+                    🌱 Predict Crop Yield
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <div id="error"></div>
+
+
+        <div id="result">
+
+            <div class="result-label">
+                Prediction Result
+            </div>
+
+            <div id="prediction"></div>
+
+            <div class="result-subtitle">
+                Estimated crop yield per hectare
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= HOW IT WORKS ================= -->
+
+<section class="section" id="how-it-works">
+
+    <div class="section-heading">
+        <span>Simple Process</span>
+        <h2>How It Works</h2>
+        <p>From agricultural data to machine learning prediction.</p>
+    </div>
+
+
+    <div class="steps">
+
+        <div class="step">
+
+            <div class="step-number">01</div>
+
+            <div class="step-icon">📊</div>
+
+            <h3>Data Input</h3>
+
+            <p>
+                Enter agricultural and environmental information.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">02</div>
+
+            <div class="step-icon">🧹</div>
+
+            <h3>Preprocessing</h3>
+
+            <p>
+                Input data is prepared for the machine learning model.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">03</div>
+
+            <div class="step-icon">🤖</div>
+
+            <h3>ML Model</h3>
+
+            <p>
+                The trained model processes the agricultural data.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">04</div>
+
+            <div class="step-icon">🌾</div>
+
+            <h3>Prediction</h3>
+
+            <p>
+                Get the estimated crop yield in tons per hectare.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= MODEL PERFORMANCE ================= -->
+
+<section class="section">
+
+    <div class="section-heading">
+        <span>Machine Learning</span>
+        <h2>Model Performance</h2>
+        <p>Performance metrics can be displayed here using your actual model values.</p>
+    </div>
+
+
+    <div class="metrics">
+
+        <div class="metric">
+            <div class="metric-icon">🎯</div>
+            <div class="metric-value">—</div>
+            <div class="metric-label">Accuracy</div>
+        </div>
+
+        <div class="metric">
+            <div class="metric-icon">📈</div>
+            <div class="metric-value">—</div>
+            <div class="metric-label">R² Score</div>
+        </div>
+
+        <div class="metric">
+            <div class="metric-icon">📉</div>
+            <div class="metric-value">—</div>
+            <div class="metric-label">MAE</div>
+        </div>
+
+        <div class="metric">
+            <div class="metric-icon">🗃️</div>
+            <div class="metric-value">ML</div>
+            <div class="metric-label">Model</div>
+        </div>
+
+    </div>
+
+    <p class="metric-note">
+        * Actual performance values should be added from the trained model evaluation.
+    </p>
+
+</section>
+
+
+<!-- ================= ABOUT + DEVELOPER ================= -->
+
+<section class="section" id="about">
+
+    <div class="section-heading">
+        <span>Project Information</span>
+        <h2>About CropVision AI</h2>
+    </div>
+
+
+    <div class="about-wrapper">
+
+        <div class="about-card">
+
+            <h2>🌿 About the Project</h2>
+
+            <p>
+                CropVision AI is a machine-learning-based application
+                designed to predict crop yield using agricultural and
+                environmental data.
+            </p>
+
+            <br>
+
+            <p>
+                The system combines agricultural information with a
+                trained machine learning model to provide an estimated
+                crop yield.
+            </p>
+
+        </div>
+
+
+        <div class="developer-card">
+
+            <div class="developer-avatar">
+                👩‍💻
+            </div>
+
+            <h3>Shraddha Dhawale</h3>
+
+            <p>
+                Diploma in Information Technology
+            </p>
+
+            <p>
+                Machine Learning Internship Project — 2026
+            </p>
+
+
+            <div class="tech-pills">
+
+                <span class="pill">Python</span>
+                <span class="pill">Flask</span>
+                <span class="pill">Pandas</span>
+                <span class="pill">Scikit-learn</span>
+                <span class="pill">Machine Learning</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <div class="footer-inner">
+
+        <p>
+            🌱 <strong>CropVision AI</strong>
+            — Smart Agriculture with Machine Learning
+        </p>
+
+        <p>
+            © 2026 CropVision AI · Developed by Shraddha Dhawale
+        </p>
+
+    </div>
+
+</footer>
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+
+document
+    .getElementById("predictionForm")
+    .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const data = {
+
+            Crop_Type:
+                document.getElementById("Crop_Type").value,
+
+            Region:
+                document.getElementById("Region").value,
+
+            Soil_Type:
+                document.getElementById("Soil_Type").value,
+
+            Season:
+                document.getElementById("Season").value,
+
+            Farm_Area_Hectares:
+                document.getElementById("Farm_Area_Hectares").value,
+
+            Rainfall_mm:
+                document.getElementById("Rainfall_mm").value,
+
+            Temperature_C:
+                document.getElementById("Temperature_C").value,
+
+            Humidity_Percent:
+                document.getElementById("Humidity_Percent").value,
+
+            Soil_pH:
+                document.getElementById("Soil_pH").value,
+
+            Nitrogen_kg_ha:
+                document.getElementById("Nitrogen_kg_ha").value,
+
+            Phosphorus_kg_ha:
+                document.getElementById("Phosphorus_kg_ha").value,
+
+            Potassium_kg_ha:
+                document.getElementById("Potassium_kg_ha").value,
+
+            Fertilizer_Used_kg:
+                document.getElementById("Fertilizer_Used_kg").value,
+
+            Pesticide_Used_Liters:
+                document.getElementById("Pesticide_Used_Liters").value,
+
+            Irrigation_Method:
+                document.getElementById("Irrigation_Method").value,
+
+            Sunshine_Hours:
+                document.getElementById("Sunshine_Hours").value,
+
+            Organic_Farming:
+                document.getElementById("Organic_Farming").value
+        };
+
+
+        try {
+
+            const response = await fetch("/predict", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(data)
+
+            });
+
+
+            const result = await response.json();
+
+
+            if (result.success) {
+
+                document.getElementById("error").style.display = "none";
+
+                document.getElementById("result").style.display = "block";
+
+                document.getElementById("prediction").innerText =
+                    result.prediction + " Tons / Hectare";
+
+                document.getElementById("result").scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+            }
+
+            else {
+
+                document.getElementById("result").style.display = "none";
+
+                document.getElementById("error").style.display = "block";
+
+                document.getElementById("error").innerText =
+                    result.error;
+
+            }
+
+        }
+
+        catch (error) {
+
+            document.getElementById("result").style.display = "none";
+
+            document.getElementById("error").style.display = "block";
+
+            document.getElementById("error").innerText =
+                "Could not connect to prediction server.";
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>
